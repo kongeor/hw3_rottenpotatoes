@@ -22,14 +22,43 @@ Background: movies have been added to database
   And  I am on the RottenPotatoes home page
   
 Scenario: restrict to movies with 'PG' or 'R' ratings
-  # enter step(s) to check the 'PG' and 'R' checkboxes
-  # enter step(s) to uncheck all other checkboxes
-  # enter step to "submit" the search form on the homepage
-  # enter step(s) to ensure that PG and R movies are visible
-  # enter step(s) to ensure that other movies are not visible
+    Given I am on the RottenPotatoes home page
+    When I check "ratings_PG-13"
+    And I check "ratings_R"
+    And I uncheck "ratings_G"
+    And I uncheck "ratings_PG"
+    And I uncheck "ratings_NC-17"
+    And I press "Refresh"
+    Then Ratings column should have "PG-13"
+    And Ratings column should have "R"
+    And Ratings column should not have "G"
+    And Ratings column should not have "PG"
+    And Ratings column should not have "NC-17"
 
 Scenario: no ratings selected
-  # see assignment
+    Given I am on the RottenPotatoes home page
+    When I uncheck "ratings_PG-13"
+    And I uncheck "ratings_R"
+    And I uncheck "ratings_G"
+    And I uncheck "ratings_PG"
+    And I uncheck "ratings_NC-17"
+    And I press "Refresh"
+    Then Ratings column should not have "R"
+    And Ratings column should not have "PG-13"
+    And Ratings column should not have "G"
+    And Ratings column should not have "PG"
+    And Ratings column should not have "NC-17"
 
 Scenario: all ratings selected
-  # see assignment
+    Given I am on the RottenPotatoes home page
+    When I check "ratings_PG-13"
+    And I check "ratings_R"
+    And I check "ratings_G"
+    And I check "ratings_PG"
+    And I check "ratings_NC-17"
+    And I press "Refresh"
+    Then Ratings column should have "R"
+    And Ratings column should have "PG-13"
+    And Ratings column should have "G"
+    And Ratings column should have "PG"
+    And Ratings column should have "NC-17"

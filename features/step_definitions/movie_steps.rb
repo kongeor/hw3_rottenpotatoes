@@ -2,10 +2,8 @@
 
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
-    # each returned element will be a hash whose key is the table header.
-    # you should arrange to add that movie to the database here.
+    @movie= Movie.create!(movie)
   end
-  flunk "Unimplemented"
 end
 
 # Make sure that one string (regexp) occurs before or after another one
@@ -26,3 +24,25 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
 end
+
+Then /^Ratings column should have "(.*?)"$/ do |rating|
+  regexp = Regexp.new(rating)
+
+  if page.respond_to? :should
+    page.should have_xpath('//table/tbody/tr/td[2]', :text => regexp)
+  else
+    assert page.has_xpath?('//table/tbody/tr/td[2]', :text => regexp)
+  end
+end
+
+Then /^Ratings column should not have "(.*?)"$/ do |rating|
+
+  regexp = Regexp.new(rating)
+
+  if page.respond_to? :should
+    page.should have_no_xpath('//table/tr/td[2]', :text => regexp)
+  else
+    assert page.has_no_xpath?('//table/tr/td[2]', :text => regexp)
+  end
+end
+
